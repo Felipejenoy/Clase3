@@ -28,7 +28,7 @@ def create_items_table():
             conn.close()
 
 # Ejecutamos la creación de la tabla
-create_items_table()
+#create_items_table()
 
 # Ruta para crear un nuevo item
 @app.route('/items', methods=['POST'])
