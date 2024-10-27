@@ -1,18 +1,20 @@
-# Usa una imagen base de Python
-FROM python:3.9
+# Usar una imagen base adecuada
+FROM python:3.11
 
-# Establece el directorio de trabajo dentro del contenedor
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia el archivo de requisitos y luego instala las dependencias
+# Copiar los archivos de requisitos y la aplicación
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+COPY app.py .
 
-# Copia el resto de los archivos de la aplicación
-COPY . .
+# Instalar las dependencias necesarias
+RUN apt-get update && \
+    apt-get install -y unixodbc-dev && \
+    pip install --no-cache-dir -r requirements.txt
 
-# Expone el puerto en el que corre tu aplicación (Heroku espera que uses el puerto 5000)
+# Exponer el puerto que usará la aplicación
 EXPOSE 5000
 
-# Comando para iniciar la aplicación
+# Comando para ejecutar la aplicación
 CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000"]
