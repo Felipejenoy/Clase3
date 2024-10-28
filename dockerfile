@@ -1,17 +1,19 @@
-# Usa una imagen base de Python
 FROM python:3.9-slim
 
-# Establece el directorio de trabajo
+# Instalar las dependencias necesarias
+RUN apt-get update && apt-get install -y \
+    unixodbc \
+    unixodbc-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copia los archivos necesarios al contenedor
-COPY . /app
+# Copiar los archivos de la aplicación
+COPY . .
 
-# Instala las dependencias
-RUN pip install -r requirements.txt
-
-# Expone el puerto 5000 (el puerto predeterminado de Flask)
-EXPOSE 5000
+# Instalar las dependencias de Python
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Comando para ejecutar la aplicación
 CMD ["python", "app.py"]
