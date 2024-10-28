@@ -1,20 +1,17 @@
-# Usar una imagen base adecuada
-FROM python:3.11
+# Usa una imagen base de Python
+FROM python:3.9-slim
 
-# Establecer el directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /app
 
-# Copiar los archivos de requisitos y la aplicación
-COPY requirements.txt .
-COPY app.py .
+# Copia los archivos necesarios al contenedor
+COPY . /app
 
-# Instalar las dependencias necesarias
-RUN apt-get update && \
-    apt-get install -y unixodbc-dev && \
-    pip install --no-cache-dir -r requirements.txt
+# Instala las dependencias
+RUN pip install -r requirements.txt
 
-# Exponer el puerto que usará la aplicación
+# Expone el puerto 5000 (el puerto predeterminado de Flask)
 EXPOSE 5000
 
 # Comando para ejecutar la aplicación
-CMD ["gunicorn", "app:app", "-b", "0.0.0.0:5000"]
+CMD ["python", "app.py"]
