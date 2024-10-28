@@ -1,7 +1,7 @@
-
 from flask import Flask, request, jsonify
 import pyodbc
 import config
+import os
 
 app = Flask(__name__)
 
@@ -28,7 +28,7 @@ def create_items_table():
             conn.close()
 
 # Ejecutamos la creación de la tabla
-#create_items_table()
+create_items_table()
 
 # Ruta para crear un nuevo item
 @app.route('/items', methods=['POST'])
@@ -76,4 +76,6 @@ def get_items():
                 print(f'Error al cerrar la conexión: {e}')
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Configurar el puerto y host para Render
+    port = int(os.environ.get('PORT', 5000))  # Usa 5000 como valor predeterminado
+    app.run(host='0.0.0.0', port=port, debug=True)
